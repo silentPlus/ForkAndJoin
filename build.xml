@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project default="jar" basedir=".">
+<property name="appname" value="hcjkAlarmSummary" />
+<property name="jarname" value="hc-alarm-summary-1.0.0" />
+<property name="base" value="." />
+<property name="tobase" value="E:\IdeaProjects\SummaryAlarm\deployment" />
+<property name="libdir" value = "lib"/>
+<property name="src" value="src" />
+<property name="build" value="out" />
+<property name="myclasspath" value="${build}" />
+
+<target name="clean" >
+	<mkdir dir="${tobase}/${appname}" />
+	<delete includeEmptyDirs="true">
+		<fileset dir="${tobase}/${appname}" />
+	</delete>
+</target>
+
+<target name="copy" depends="clean"> 
+ <copy todir="${tobase}/${appname}">
+   <fileset dir="${build}">
+       <include name="com/**" />
+   
+    
+      <exclude name=".svn"/>
+  </fileset>
+ </copy>
+</target>
+ 
+<target name="jar" depends="copy">
+<jar destfile="${tobase}/${jarname}.jar" basedir="${tobase}/${appname}">
+</jar>
+</target>
+</project>

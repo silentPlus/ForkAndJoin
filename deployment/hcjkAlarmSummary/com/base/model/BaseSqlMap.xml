@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="base">
+
+	<typeAlias type="com.base.model.Alarmeventdetail" alias="Alarmeventdetail" />
+	<typeAlias type="com.base.model.AlarmSummary" alias="AlarmSummary" />
+
+    <select id="selectAllAlarmCount" resultClass="java.lang.Integer">
+        SELECT
+            count(*)
+        FROM alarmeventdetail
+    </select>
+
+    <select id="selectPageAlarm" resultClass="Alarmeventdetail" parameterClass="java.util.Map">
+        SELECT
+            eventid,
+            `level`,
+            alarmtime,
+            res_id,
+            node_id,
+            parameter,
+            parameterdetail,
+            alarm_config,
+            alarmdata,
+            readflag,
+            id
+        FROM alarmeventdetail
+        LIMIT #skip#, #max#
+    </select>
+
+    <select id="selectAlarmSummary" resultClass="AlarmSummary" remapResults="true" parameterClass="Alarmeventdetail">
+        SELECT
+            t.id,
+            t.alarmtime,
+            t.`level`,
+            t.res_id,
+            t.node_id,
+            t.parameter,
+            t.alarm_config,
+            t.readflag,
+            t.total
+        FROM
+            alarm_summary t
+        WHERE 1=1
+        <isNotEmpty prepend="and" property="level">
+            t.LEVEL = #level#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="alarmtime">
+            t.alarmtime = DATE_FORMAT(#alarmtime#, '%Y-%m-%d')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="res_id">
+            t.res_id = #res_id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="node_id">
+            t.node_id = #node_id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="parameter">
+            t.parameter = #parameter#
+        </isNotEmpty>
+        <isEmpty prepend="and" property="parameter">
+            t.parameter is NULL
+        </isEmpty>
+        <isNotEmpty prepend="and" property="parameter">
+            t.parameter = #parameter#
+        </isNotEmpty>
+        <isEmpty prepend="and" property="parameter">
+            t.parameter is NULL
+        </isEmpty>
+        <isNotEmpty prepend="and" property="parameterdetail">
+            t.parameterdetail = #parameterdetail#
+        </isNotEmpty>
+        <isEmpty prepend="and" property="parameterdetail">
+            t.parameterdetail is NULL
+        </isEmpty>
+        <isNotEmpty prepend="and" property="alarm_config">
+            t.alarm_config = #alarm_config#
+        </isNotEmpty>
+        <isEmpty prepend="and" property="alarm_config">
+            t.alarm_config is NULL
+        </isEmpty>
+        <isNotEmpty prepend="and" property="readflag">
+            t.readflag = #readflag#
+        </isNotEmpty>
+    </select>
+
+    <insert id="insertAlarmSummary" parameterClass="AlarmSummary">
+        INSERT INTO alarm_summary(id, level, alarmtime, res_id, node_id, parameter, parameterdetail, alarm_config, readflag, total)
+        values (#id#, #level#, #alarmtime#, #res_id#, #node_id#, #parameter#, #parameterdetail#, #alarm_config#, #readflag#, #total#)
+    </insert>
+
+    <update id="updateAlarmSummaryTotal" parameterClass="AlarmSummary">
+        update alarm_summary set total = #total# where id = #id#
+    </update>
+</sqlMap>
