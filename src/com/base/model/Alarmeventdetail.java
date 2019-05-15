@@ -3,10 +3,7 @@ package com.base.model;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * @描述: Alarmeventdetail表对应的model
- * @作者: zhangpan
- * @创建日期: 2017年4月21日 下午3:23:46
- * @公司 浙江鸿程计算机系统有限公司 
+ * Created by suvan on 2017/10/31.
  */
 public class Alarmeventdetail {
     private Integer id;
